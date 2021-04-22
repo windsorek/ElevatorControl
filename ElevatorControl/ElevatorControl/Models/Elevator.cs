@@ -29,7 +29,7 @@ namespace ElevatorControl.Models
         /// <summary>
         /// Current floor of the elevator
         /// </summary>
-        public int? CurrentFloor { get; private set; }
+        public int? CurrentFloor { get { return currentFloor; }  private set { currentFloor = value; OnPropertyChanged("CurrentFloor"); } }
         /// <summary>
         /// total number of floors in elevator shaft
         /// </summary>
@@ -57,6 +57,7 @@ namespace ElevatorControl.Models
 
         private DoorState doorState;
         private ElevatorState elevatorState;
+        private int? currentFloor;
         private static Timer processorTimer;
         private const double processorTimerInterval = 500;
 
@@ -113,7 +114,7 @@ namespace ElevatorControl.Models
                 RequestProcessor();
             }else
             {
-                Logger?.LogInformation($"{Id} No Requests to do, ElevatorIdle:{ElevatorIdle()}");
+                Logger?.LogDebug($"{Id} No Requests to do, ElevatorIdle:{ElevatorIdle()}");
             }
         }
 
@@ -174,7 +175,26 @@ namespace ElevatorControl.Models
         }
         private void Elevator_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Logger?.LogInformation($"Property has Been updated: {e.PropertyName}");
+            //Logger?.LogInformation($"Property has Been updated: {e.PropertyName}");
+            string additionalInfo = "";
+            switch (e.PropertyName)
+            {
+                case "DoorState":
+                    additionalInfo = $"Door: {Enum.GetName(typeof(Models.DoorState), this.DoorState)}";
+                    break;
+                case "ElevatorState":
+                    additionalInfo = $"Elevator: {Enum.GetName(typeof(Models.ElevatorState), this.ElevatorState)}";
+                    break;
+                case "CurrentFloor":
+                    if (CurrentFloor != null)
+                        additionalInfo = $"Last Floor: {CurrentFloor}";
+                    break;
+
+            }
+            if (additionalInfo != "")
+            {
+                Logger?.LogInformation($"Elevator:{Id} : {additionalInfo}");
+            }
         }
 
         private async Task<bool> MoveElevator(int targetFloor)
