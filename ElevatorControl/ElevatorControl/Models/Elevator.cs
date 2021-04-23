@@ -61,7 +61,7 @@ namespace ElevatorControl.Models
         private static Timer processorTimer;
         private const double processorTimerInterval = 500;
 
-        public ILogger<Elevator> Logger { get; set; }
+        public ILogger<Elevator> Logger { private get; set; }
         
 
         protected void OnPropertyChanged(string name)
