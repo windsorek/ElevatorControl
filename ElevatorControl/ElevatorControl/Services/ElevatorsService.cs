@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Metrics.Concurrency;
 using ElevatorControl.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -9,7 +10,7 @@ namespace ElevatorControl.Models
 {
     public class ElevatorsService : IElevatorService
     {
-        public ConcurrentDictionary<int,Elevator> elevators { get; set; }
+        public ConcurrentDictionary<int,Elevator> elevators { get; private set; }
 
         private readonly ILogger<Elevator> _logger;
 
@@ -30,14 +31,19 @@ namespace ElevatorControl.Models
 
         public bool AddElevator(Elevator elevator)
         {
-            if(elevator.Id == 0 && elevators.Count > 0)
+            bool retVal = false;
+            lock (elevators)
             {
-                ///find first available
+                if (elevator.Id == 0 && elevators.Count > 0)
+                {
+                    ///find first available
 
-                elevator.Id = elevators.Max(e => e.Value.Id) + 1;
+                    elevator.Id = elevators.Max(e => e.Value.Id) + 1;
+                }
+                elevator.Logger = _logger;
+                retVal = elevators.TryAdd(elevator.Id, elevator);
             }
-            elevator.Logger = _logger;
-            return elevators.TryAdd(elevator.Id, elevator);
+            return retVal;
         }
 
         public bool CallElevator(int id,ElevatorRequest elevatorRequest)

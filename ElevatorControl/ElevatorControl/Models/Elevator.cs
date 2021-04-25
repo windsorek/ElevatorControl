@@ -33,12 +33,12 @@ namespace ElevatorControl.Models
         /// <summary>
         /// total number of floors in elevator shaft
         /// </summary>
-        public uint TotalFloors { get; set; } = 10;
+        public uint TotalFloors { get; private set; } = 10;
 
         /// <summary>
         /// Lowest possible floor for elevator - default 0 - ground floor - but maybe "-10" for 10 undeground levels
         /// </summary>
-        public int LowestFloor { get; set; } = 0;
+        public int LowestFloor { get; private set; } = 0;
 
         /// <summary>
         /// Elevator speed  in [floors/s]
