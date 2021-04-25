@@ -48,7 +48,7 @@ namespace ElevatorControl.Models
         /// <summary>
         /// Speed at which elevator door opens or closes [s]
         /// </summary>
-        private const float DoorOperatingSpeed = 1;
+        private const float DoorOperatingSpeed = 2;
 
         /// <summary>
         /// Raised when Property was changed
