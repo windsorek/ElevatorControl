@@ -64,5 +64,36 @@ namespace XUnitTests_ElevatorControl
                 Assert.Null(result.Value);
             }
         }
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RequestElevatorTest( bool success)
+        {
+            // Arrange
+            int id = 0;
+            int targetFloor = 1;
+            Elevator elevator = new Elevator(10, 0);
+            Mock<IElevatorService> mockElevatorService = new Mock<IElevatorService>();
+            ElevatorRequest elevatorRequest = new ElevatorRequest(targetFloor);
+            mockElevatorService.Setup(mock => mock.GetElevator(id)).ReturnsAsync(elevator);
+            mockElevatorService.Setup(mock => mock.CallElevator(id, elevatorRequest)).Returns(success);
+
+            ElevatorsController controller = new ElevatorsController(mockElevatorService.Object);
+
+            // Act
+            ActionResult<Elevator> result = await controller.RequestElevator(id, elevatorRequest);
+
+            // Assert
+            var viewResult = Assert.IsType<ActionResult<Elevator>>(result);
+            if (success)
+            {
+                Assert.IsType<OkObjectResult>(viewResult.Result);
+            }
+            else
+            {
+                Assert.IsType<BadRequestObjectResult>(viewResult.Result);
+            }
+        }
+
     }
 }
