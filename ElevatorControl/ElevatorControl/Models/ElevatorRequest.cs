@@ -17,12 +17,8 @@ namespace ElevatorControl.Models
         /// <summary>
         /// Requests
         /// </summary>
-        public int TargetFloor { get; set; }
+        public int TargetFloor { get; private set; }
 
-        public ElevatorRequest()
-        {
-            Init();
-        }
         private void Init()
         {
             TimeStamp = DateTime.Now;
