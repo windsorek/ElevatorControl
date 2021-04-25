@@ -39,5 +39,19 @@ namespace ElevatorControl.Models
             elevator.Logger = _logger;
             return elevators.TryAdd(elevator.Id, elevator);
         }
+
+        public bool CallElevator(int id,ElevatorRequest elevatorRequest)
+        {
+            
+            if(!elevators.ContainsKey(id))
+            {
+                return false;
+            }
+
+            Elevator elevator = elevators[id];
+
+
+            return elevator.CallMe(elevatorRequest.TargetFloor);
+        }
     }
 }

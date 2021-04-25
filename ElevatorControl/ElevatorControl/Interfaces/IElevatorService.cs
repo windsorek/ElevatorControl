@@ -11,6 +11,6 @@ namespace ElevatorControl.Interfaces
         Task<Elevator> GetElevator(int id);
         Task<List<Elevator>> GetElevator();
         bool AddElevator(Elevator elevator);
-
+        bool CallElevator(int id, ElevatorRequest elevatorRequest);
     }
 }

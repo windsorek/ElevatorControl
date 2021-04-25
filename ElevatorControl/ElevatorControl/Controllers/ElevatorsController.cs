@@ -54,7 +54,7 @@ namespace ElevatorControl.Controllers
             {
                 return NotFound();
             }
-            bool retVal = elevator.CallMe(elevatorRequest);
+            bool retVal = _elevators.CallElevator(id,elevatorRequest);
             if (!retVal)
                 return BadRequest(elevatorRequest.TargetFloor);
 
