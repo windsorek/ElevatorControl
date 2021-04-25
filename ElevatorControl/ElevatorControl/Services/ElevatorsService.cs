@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using App.Metrics.Concurrency;
 using ElevatorControl.Interfaces;
 using Microsoft.Extensions.Logging;
 
